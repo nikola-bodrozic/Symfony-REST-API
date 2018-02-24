@@ -1,5 +1,8 @@
 Symfony REST API
 ================
+Install:
+* `composer install`
+* `php bin/console doctrine:schema:update --force`
 
 Features:
 * performs CRUD on User entity
