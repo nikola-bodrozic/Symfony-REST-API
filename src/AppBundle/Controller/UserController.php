@@ -39,19 +39,25 @@ class UserController extends FOSRestController {
      * @Rest\Post("/user")
      */
     public function postAction(Request $request) {
-        $data = new User;
-        $name = $request->get('name');
-        $role = $request->get('role');
-        if (empty($name) || empty($role)) {
-            return new View("NULL VALUES ARE NOT ALLOWED", Response::HTTP_NOT_ACCEPTABLE);
+        $h = $request->headers->get('Authorization');
+        if ($h != 'Bearer e4d3'){
+            return new View("not authorisaed", Response::HTTP_UNAUTHORIZED);
         }
-        $data->setName($name);
-        $data->setRole($role);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($data);
-        $em->flush();
-        
-        return $this->json(array('id' => $data->getId()));
+        else {
+            $data = new User;
+            $name = $request->get('name');
+            $role = $request->get('role');
+            if (empty($name) || empty($role)) {
+                return new View("NULL VALUES ARE NOT ALLOWED", Response::HTTP_NOT_ACCEPTABLE);
+            }
+            $data->setName($name);
+            $data->setRole($role);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($data);
+            $em->flush();
+
+            return $this->json(['id' => $data->getId()]);
+        }
     }
 
     /**
