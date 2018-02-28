@@ -34,7 +34,30 @@ class UserController extends FOSRestController {
         }
         return $singleresult;
     }
-
+    
+    /**
+     * Get bearer token by POST form 
+     * 
+     * @Route("/login")
+     * @param Request $request
+     * @return View
+     */
+    public function login(Request $request) {
+         $n = $request->request->get('name');
+         $p = $request->request->get('password');
+         $t = $request->request->get('csrf_token');
+         if ($n == 'test' && $p == '123' && $t == 'abc') {
+            return $this->json(["token" => "e4d3"]);
+         }
+         return new View('Wrong credentials', Response::HTTP_FORBIDDEN);
+    }
+    
+    /**
+     * Check if user has proper token
+     * 
+     * @param type $param
+     * @return boolean
+     */
     private function is($param) {
         if ($param != 'Bearer e4d3') {
             return true;
